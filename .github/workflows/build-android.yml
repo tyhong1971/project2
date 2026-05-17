@@ -12,8 +12,6 @@ on:
 jobs:
   build:
     runs-on: ubuntu-22.04
-    env:
-      ANDROID_NON_INTERACTIVE: 1
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -46,12 +44,25 @@ jobs:
             automake \
             libltdl-dev
 
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+        with:
+          cmdline-tools-version: 9477386
+          packages: 'platform-tools platforms;android-33 build-tools;33.0.0'
+
+      - name: Accept Android SDK licenses
+        run: |
+          yes | $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager --licenses || true
+
       - name: Install buildozer
         run: |
           pip install buildozer cython
 
       - name: Build APK (Kivy UI Version)
         working-directory: ./android_client
+        env:
+          ANDROID_SDK_ROOT: ${{ env.ANDROID_SDK_ROOT }}
+          ANDROID_HOME: ${{ env.ANDROID_HOME }}
         run: |
           buildozer android debug
 
