@@ -12,6 +12,8 @@ on:
 jobs:
   build:
     runs-on: ubuntu-22.04
+    env:
+      ANDROID_NON_INTERACTIVE: 1
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
