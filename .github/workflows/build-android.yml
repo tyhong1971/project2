@@ -7,7 +7,7 @@ on:
       - 'android_client/**'
   pull_request:
     branches: [ main, master ]
-  workflow_dispatch:  # 允许手动触发
+  workflow_dispatch:
 
 jobs:
   build:
@@ -75,11 +75,22 @@ jobs:
           }
           echo "=== Build Completed Successfully ==="
 
+      - name: Find APK files
+        run: |
+          echo "=== Searching for APK files ==="
+          find . -name "*.apk" -type f
+          echo "=== Listing bin directory ==="
+          ls -la android_client/bin/ 2>/dev/null || echo "bin directory not found"
+          ls -la bin/ 2>/dev/null || echo "bin directory not found in root"
+
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
           name: screencast-android-apk
-          path: android_client/bin/*.apk
+          path: |
+            android_client/bin/*.apk
+            bin/*.apk
+          if-no-files-found: error
           retention-days: 30
 
       - name: Create Release
@@ -88,7 +99,9 @@ jobs:
         with:
           tag_name: v${{ github.run_number }}
           name: Release v${{ github.run_number }}
-          files: android_client/bin/*.apk
+          files: |
+            android_client/bin/*.apk
+            bin/*.apk
           draft: false
           prerelease: false
         env:
