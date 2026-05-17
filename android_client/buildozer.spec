@@ -49,8 +49,7 @@ android.ndk = 25b
 android.skip_update = False
 
 # (str) Use a local copy of python-for-android instead of cloning
-# p4a.branch = master
-# p4a.source_dir = /opt/p4a
+p4a.branch = develop
 
 # (bool) If True, then automatically accept SDK license
 android.accept_sdk_license = True
