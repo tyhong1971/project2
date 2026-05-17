@@ -11,7 +11,7 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -23,8 +23,8 @@ jobs:
 
       - name: Install system dependencies
         run: |
-          sudo apt update
-          sudo apt install -y \
+          sudo apt-get update
+          sudo apt-get install -y \
             python3-pip \
             python3-venv \
             git \
@@ -41,7 +41,8 @@ jobs:
             cmake \
             libffi-dev \
             libssl-dev \
-            automake
+            automake \
+            libltdl-dev
 
       - name: Install buildozer
         run: |
