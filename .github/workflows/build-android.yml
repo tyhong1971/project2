@@ -64,7 +64,16 @@ jobs:
           ANDROID_SDK_ROOT: ${{ env.ANDROID_SDK_ROOT }}
           ANDROID_HOME: ${{ env.ANDROID_HOME }}
         run: |
-          buildozer android debug
+          set -e
+          echo "=== Starting Buildozer Build ==="
+          buildozer android debug 2>&1 | tee build.log || {
+            echo "=== BUILD FAILED ==="
+            echo "Exit code: $?"
+            echo "=== Last 100 lines of build log ==="
+            tail -100 build.log
+            exit 1
+          }
+          echo "=== Build Completed Successfully ==="
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
