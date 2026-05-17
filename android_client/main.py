@@ -415,5 +415,3 @@ class ScreenCastApp(App):
 
 if __name__ == '__main__':
     ScreenCastApp().run()
- 
- 
