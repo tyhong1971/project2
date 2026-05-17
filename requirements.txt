@@ -1,0 +1,6 @@
+# 局域网投屏系统 - 依赖
+PyQt5>=5.15
+Pillow>=9.0
+mss>=7.0    # 可选，提升屏幕采集性能（不安装则自动回退到 PIL ImageGrab）
+sounddevice>=0.4.0  # 音频捕获和播放
+soundcard>=0.4.0    # 系统音频捕获（支持WASAPI）

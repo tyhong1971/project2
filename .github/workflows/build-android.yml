@@ -1,0 +1,72 @@
+name: Build Android APK
+
+on:
+  push:
+    branches: [ main, master ]
+    paths:
+      - 'android_client/**'
+  pull_request:
+    branches: [ main, master ]
+  workflow_dispatch:  # 允许手动触发
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Install system dependencies
+        run: |
+          sudo apt update
+          sudo apt install -y \
+            python3-pip \
+            python3-venv \
+            git \
+            zip \
+            unzip \
+            openjdk-17-jdk \
+            autoconf \
+            libtool \
+            pkg-config \
+            zlib1g-dev \
+            libncurses5-dev \
+            libncursesw5-dev \
+            libtinfo5 \
+            cmake \
+            libffi-dev \
+            libssl-dev \
+            automake
+
+      - name: Install buildozer
+        run: |
+          pip install buildozer cython
+
+      - name: Build APK (Kivy UI Version)
+        working-directory: ./android_client
+        run: |
+          buildozer android debug
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: screencast-android-apk
+          path: android_client/bin/*.apk
+          retention-days: 30
+
+      - name: Create Release
+        if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master')
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: v${{ github.run_number }}
+          name: Release v${{ github.run_number }}
+          files: android_client/bin/*.apk
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

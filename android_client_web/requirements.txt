@@ -1,0 +1,2 @@
+# 安卓客户端 Web UI 版本依赖
+websockets>=10.0

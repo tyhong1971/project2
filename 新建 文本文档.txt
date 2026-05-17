@@ -1,0 +1,120 @@
+方案一：使用 WSL2（推荐，最简单）
+1. 安装 WSL2（如果还没安装）
+
+PowerShell
+
+# 以管理员身份运行 PowerShell
+wsl --install
+安装完成后重启电脑，然后打开 Ubuntu。
+
+2.. 在 WSL 中安装依赖
+
+Bash
+
+sudo apt update
+sudo apt install -y python3-pip python3-venv git unzip openjdk-17-jdk
+pip3 install buildozer cython
+
+目前服务端和客户端能正常投屏和接收，现在要增加一个安卓版本的客户端，只接收服务器的投屏
+20:17
+
+
+
+
+
+
+
+安卓客户端已创建完成！
+
+创建的文件
+文件	说明
+android_client.py	客户端核心逻辑（复用现有协议）
+main.py	Kivy UI 界面
+buildozer.spec	APK 打包配置
+requirements.txt	Python 依赖
+README.md	使用说明文档
+功能支持
+✅ 屏幕接收 - 接收教师端屏幕广播
+✅ 音频接收 - 接收教师端音频广播
+✅ 消息通知 - 接收教师发送的消息
+✅ 屏幕锁定 - 支持被教师锁定屏幕
+下一步操作
+1. PC 上测试（可选）
+
+Bash
+
+pip install kivy
+cd f:\trae\投屏\android_client
+python main.py
+2. 打包 APK（需要 Linux 环境）
+推荐使用 WSL2 或 Linux 虚拟机：
+
+
+Bash
+
+pip install buildozer cython
+cd android_client
+buildozer android debug
+打包完成后，APK 位于 bin/ 目录，可直接安装到安卓设备。
+
+产物汇总
+文件变更
+
+requirements.txt
+txt
+
+README.md
+Markdown
+代码变更
+
+3 个文件已更改
+
+image.png
+PNG
+无法生成apk
+20:28
+
+
+问题找到了！Buildozer 只能在 Linux 环境下运行，不能在 Windows 上直接运行。
+
+我为您提供几种解决方案：
+
+方案一：使用 WSL2（推荐，最简单）
+1. 安装 WSL2（如果还没安装）
+
+PowerShell
+
+# 以管理员身份运行 PowerShell
+wsl --install
+安装完成后重启电脑，然后打开 Ubuntu。
+
+2. 在 WSL 中安装依赖
+
+Bash
+
+sudo apt update
+sudo apt install -y python3-pip python3-venv git unzip openjdk-17-jdk
+pip3 install buildozer cython
+
+3. 在 WSL 中打包
+
+
+# 进入项目目录（Windows 磁盘挂载在 /mnt 下）
+cd /mnt/f/trae/投屏/android_client
+
+# 打包 APK
+buildozer android debug
+
+
+将代码推送到 GitHub：
+
+
+Bash
+
+cd f:\trae\投屏
+git init
+git add .
+git commit -m "Initial commit"
+git branch -M main
+git remote add origin https://github.com/ tyh_com@163.com/tyhong1971.git
+git push -u origin main
